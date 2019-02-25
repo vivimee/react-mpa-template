@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "private": true,
   "license": "MIT",
-  "sideEffects": false,
   "scripts": {
     "build": "webpack --config ./build/webpack.prod.config.js",
     "dev": "webpack-dev-server --color --hot --config ./build/webpack.dev.config.js"

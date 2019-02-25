@@ -7,7 +7,7 @@ export default class AContainer extends Component {
         return (
             <div>
                 {/* <img src={bg} /> */}
-                <h3>hi b</h3>
+                <h3>hi b～</h3>
             </div>
         );
     }
