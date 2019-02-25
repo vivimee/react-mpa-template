@@ -1,22 +1,14 @@
 const path = require("path");
-const HtmlWebpackPlugin = require("html-webpack-plugin");
+const webpack = require("webpack");
 const CleanWebpackPlugin = require("clean-webpack-plugin");
-const webpack = require('webpack');
 
 module.exports = {
-    entry: {
-        a: "./src/entries/a.js",
-        b: "./src/entries/b.js",
-    },
+    entry: {},
     output: {
         filename: "js/[name].bundle.js",
         path: path.resolve(__dirname, "../dist"),
     },
     devtool: "inline-source-map",
-    devServer: {
-        contentBase: "./dist",
-        host: "0.0.0.0",
-    },
     optimization: {
         splitChunks: {
             cacheGroups: {
@@ -29,18 +21,9 @@ module.exports = {
         },
     },
     plugins: [
+        new webpack.HotModuleReplacementPlugin(),
         new CleanWebpackPlugin(["dist"], {
             root: path.resolve(__dirname, "../"),
-        }),
-        new HtmlWebpackPlugin({
-            title: "a",
-            filename: "a.html",
-            chunks: ["common", "a"],
-        }),
-        new HtmlWebpackPlugin({
-            title: "b",
-            filename: "b.html",
-            chunks: ["common", "b"],
         }),
     ],
     module: {
@@ -49,8 +32,11 @@ module.exports = {
                 test: /\.js$/,
                 exclude: /node_modules/,
                 use: {
-                    loader: 'babel-loader'
-                }
+                    loader: "babel-loader",
+                    options: {
+                        presets: ["@babel/preset-env", "@babel/preset-react"],
+                    },
+                },
             },
             {
                 test: /\.(css|less)$/,
