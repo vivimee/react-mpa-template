@@ -6,7 +6,7 @@ export default class AContainer extends Component {
     render() {
         return (
             <div>
-                {/* <img src={bg} /> */}
+                <img src={bg} />
                 <h3>hello world</h3>
             </div>
         );

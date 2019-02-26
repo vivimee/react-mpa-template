@@ -5,7 +5,7 @@
   "license": "MIT",
   "scripts": {
     "build": "webpack --config ./build/webpack.prod.config.js",
-    "dev": "webpack-dev-server --color --hot --config ./build/webpack.dev.config.js"
+    "dev": "node ./build/build.dev.js"
   },
   "devDependencies": {
     "@babel/core": "^7.3.3",
@@ -19,6 +19,8 @@
     "less": "^3.9.0",
     "less-loader": "^4.1.0",
     "lodash": "^4.17.11",
+    "pug": "^2.0.3",
+    "pug-loader": "^2.4.0",
     "react": "^16.8.3",
     "react-dom": "^16.8.3",
     "style-loader": "^0.23.1",

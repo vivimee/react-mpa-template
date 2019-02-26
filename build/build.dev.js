@@ -16,6 +16,12 @@ entries.forEach((item) => {
         new HtmlWebpackPlugin({
             filename: `${name}.html`,
             chunks: ["common", name],
+            template: './src/templates/default.pug',
+            templateParameters: {
+                $title: name + '-title',
+                $keywords: 'word,word',
+                $description: 'this is description'
+            }
         }),
     );
 });

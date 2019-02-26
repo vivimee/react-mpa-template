@@ -5,10 +5,11 @@ const CleanWebpackPlugin = require("clean-webpack-plugin");
 module.exports = {
     entry: {},
     output: {
-        filename: "js/[name].bundle.js",
+        filename: "js/[name].js",
         path: path.resolve(__dirname, "../dist"),
     },
     devtool: "inline-source-map",
+    mode: 'development',
     optimization: {
         splitChunks: {
             cacheGroups: {
@@ -28,6 +29,10 @@ module.exports = {
     ],
     module: {
         rules: [
+            {
+                test: /\.pug$/,
+                use: ["pug-loader"]
+            },
             {
                 test: /\.js$/,
                 exclude: /node_modules/,

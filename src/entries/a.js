@@ -2,8 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import Container from '../containers/Acontainer/index';
 
-const ele = document.createElement('div');
-document.body.appendChild(ele);
+const ele = document.querySelector('#react');
 ReactDOM.render(<Container />, ele);
 
 if (module.hot) {
