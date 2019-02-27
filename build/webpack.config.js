@@ -1,52 +1,49 @@
 const path = require("path");
-const HtmlWebpackPlugin = require("html-webpack-plugin");
 const CleanWebpackPlugin = require("clean-webpack-plugin");
-const webpack = require("webpack");
+const ProgressBarPlugin = require("progress-bar-webpack-plugin");
 
 module.exports = {
     entry: {
-        a: "./src/entries/a.js",
-        b: "./src/entries/b.js",
+        polyfill: "babel-polyfill",
     },
     output: {
-        filename: "js/[name].bundle.js",
+        filename: "js/[name].[chunkhash:6].js",
         path: path.resolve(__dirname, "../dist"),
     },
-    mode: "production",
     optimization: {
+        runtimeChunk: "single",
         splitChunks: {
             cacheGroups: {
-                common: {
+                vendor: {
+                    test: /[\\/]node_modules[\\/]/,
                     name: "common",
                     chunks: "all",
-                    minChunks: 2,
                 },
             },
         },
     },
     plugins: [
+        new ProgressBarPlugin({ clear: false }),
         new CleanWebpackPlugin(["dist"], {
             root: path.resolve(__dirname, "../"),
-        }),
-        new HtmlWebpackPlugin({
-            title: "a",
-            filename: "a.html",
-            chunks: ["common", "a"],
-        }),
-        new HtmlWebpackPlugin({
-            title: "b",
-            filename: "b.html",
-            chunks: ["common", "b"],
         }),
     ],
     module: {
         rules: [
             {
+                test: /\.pug$/,
+                use: ["pug-loader"],
+            },
+            {
                 test: /\.js$/,
                 exclude: /node_modules/,
                 use: {
-                    loader: 'babel-loader'
-                }
+                    loader: "babel-loader",
+                    options: {
+                        presets: ["@babel/preset-env", "@babel/preset-react"],
+                        plugins: ["@babel/transform-runtime"],
+                    },
+                },
             },
             {
                 test: /\.(css|less)$/,

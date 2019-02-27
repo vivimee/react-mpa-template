@@ -3,8 +3,10 @@ html
     head
         meta(charset="utf-8")
         title=$title
-        meta(keywords=$keywords)
-        meta(description=$description)
+        - if ($keywords)
+            meta(keywords=$keywords)
+        - if ($description)
+            meta(description=$description)
         meta(name="viewport" content="width=device-width")
     body
         #react
