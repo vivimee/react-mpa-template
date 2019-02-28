@@ -1,62 +1,62 @@
-const path = require("path");
-const CleanWebpackPlugin = require("clean-webpack-plugin");
-const ProgressBarPlugin = require("progress-bar-webpack-plugin");
+const path = require('path');
+const CleanWebpackPlugin = require('clean-webpack-plugin');
+const ProgressBarPlugin = require('progress-bar-webpack-plugin');
 
 module.exports = {
     entry: {
-        polyfill: "babel-polyfill",
+        // polyfill: "babel-polyfill",
     },
     output: {
-        filename: "js/[name].[chunkhash:6].js",
-        path: path.resolve(__dirname, "../dist"),
+        filename: 'js/[name].[chunkhash:6].js',
+        path: path.resolve(__dirname, '../dist'),
     },
     optimization: {
-        runtimeChunk: "single",
+        runtimeChunk: 'single',
         splitChunks: {
             cacheGroups: {
                 vendor: {
                     test: /[\\/]node_modules[\\/]/,
-                    name: "common",
-                    chunks: "all",
+                    name: 'common',
+                    chunks: 'all',
                 },
             },
         },
     },
     plugins: [
         new ProgressBarPlugin({ clear: false }),
-        new CleanWebpackPlugin(["dist"], {
-            root: path.resolve(__dirname, "../"),
+        new CleanWebpackPlugin(['dist'], {
+            root: path.resolve(__dirname, '../'),
         }),
     ],
     module: {
         rules: [
             {
                 test: /\.pug$/,
-                use: ["pug-loader"],
+                use: ['pug-loader'],
             },
             {
                 test: /\.js$/,
                 exclude: /node_modules/,
                 use: {
-                    loader: "babel-loader",
+                    loader: 'babel-loader',
                     options: {
-                        presets: ["@babel/preset-env", "@babel/preset-react"],
-                        plugins: ["@babel/transform-runtime"],
+                        presets: ['@babel/preset-env', '@babel/preset-react'],
+                        plugins: ['@babel/plugin-transform-runtime'],
                     },
                 },
             },
             {
                 test: /\.(css|less)$/,
-                use: ["style-loader", "css-loader", "less-loader"],
+                use: ['style-loader', 'css-loader', 'less-loader'],
             },
             {
                 test: /\.(jpe?g|png|gif)$/,
                 use: [
                     {
-                        loader: "url-loader",
+                        loader: 'url-loader',
                         options: {
                             limit: 8192,
-                            outputPath: "images",
+                            outputPath: 'images',
                         },
                     },
                 ],
