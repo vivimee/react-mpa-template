@@ -1,13 +1,12 @@
 const path = require('path');
+const chalk = require('chalk');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const ProgressBarPlugin = require('progress-bar-webpack-plugin');
 
 module.exports = {
-    entry: {
-        // polyfill: "babel-polyfill",
-    },
+    entry: {},
     output: {
-        filename: 'js/[name].[chunkhash:6].js',
+        filename: 'js/[name].[chunkhash:7].js',
         path: path.resolve(__dirname, '../dist'),
     },
     optimization: {
@@ -23,7 +22,19 @@ module.exports = {
         },
     },
     plugins: [
-        new ProgressBarPlugin({ clear: false }),
+        new ProgressBarPlugin({
+            clear: false,
+            callback: () => {
+                if (process.env.DEV_SERVER_ENTRY) {
+                    console.log(
+                        chalk.greenBright.bold(
+                            '\nDev server started on:  ',
+                            process.env.DEV_SERVER_ENTRY,
+                        ),
+                    );
+                }
+            },
+        }),
         new CleanWebpackPlugin(['dist'], {
             root: path.resolve(__dirname, '../'),
         }),
@@ -41,7 +52,7 @@ module.exports = {
                     loader: 'babel-loader',
                     options: {
                         presets: ['@babel/preset-env', '@babel/preset-react'],
-                        plugins: ['@babel/plugin-transform-runtime'],
+                        plugins: ['@babel/transform-runtime'],
                     },
                 },
             },

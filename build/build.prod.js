@@ -1,9 +1,16 @@
 const fs = require("fs");
 const path = require("path");
 const webpack = require("webpack");
+const program = require("commander");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const package = require("../package.json");
 const config = require("./webpack.prod");
+
+program
+    .version("0.0.1")
+    .option("-e, --analysis", "Analysis bundle")
+    .parse(process.argv);
 
 const entries = fs
     .readdirSync(path.resolve(__dirname, "../src/entries"))
@@ -39,6 +46,9 @@ entries.forEach((item) => {
 
 config.entry = entry;
 config.plugins = config.plugins.concat(htmls);
+if (program.analysis) {
+    config.plugins.push(new BundleAnalyzerPlugin());
+}
 
 const compiler = webpack(config);
 compiler.run((err, stats) => {

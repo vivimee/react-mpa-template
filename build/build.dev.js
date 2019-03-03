@@ -56,7 +56,7 @@ const devServer = new WebpackDevServer(compiler, devServerOptions);
 getPort()
     .then((port) => {
         const host = "127.0.0.1";
-        console.log('          http://' + host + ':' + port + program.entry);
+        process.env.DEV_SERVER_ENTRY = `http://${host}:${port}${program.entry}`;
         devServer.listen(port, host);
     })
     .catch((e) => {

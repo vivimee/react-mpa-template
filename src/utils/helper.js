@@ -1,4 +1,4 @@
-// import _ from 'lodash';
+import _ from 'lodash';
 
 export const saySomething = () => {
     console.error('hello');
@@ -9,5 +9,5 @@ export const doSomething = () => {
 }
 
 export const looodash = () => {
-    // return _.join(['1', '2'], ',');
+    return _.join(['1', '2'], ',');
 }
