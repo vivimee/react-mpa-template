@@ -6,7 +6,7 @@
   "browserslist": "> 2%, ie 11, safari > 9",
   "scripts": {
     "build": "node ./build/build.prod.js",
-    "dev": "node ./build/build.dev.js --entry /a.html",
+    "dev": "node ./build/build.dev.js --entry /index.html",
     "analysis": "node ./build/build.prod.js --analysis"
   },
   "devDependencies": {
