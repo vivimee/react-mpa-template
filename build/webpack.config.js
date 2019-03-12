@@ -3,6 +3,10 @@ const chalk = require('chalk');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const ProgressBarPlugin = require('progress-bar-webpack-plugin');
 
+const compressAssetsString = (text) => {
+    return text.replace(/\n/g, ' ').replace(/\s+/g, ' ');
+}
+
 module.exports = {
     entry: {},
     output: {
@@ -43,7 +47,14 @@ module.exports = {
         rules: [
             {
                 test: /\.pug$/,
-                use: ['pug-loader'],
+                use: [{
+                    loader: 'pug-loader',
+                    options: {
+                        filters: {
+                            'compress-assets': compressAssetsString
+                        }
+                    }
+                }],
             },
             {
                 test: /\.js$/,
@@ -52,7 +63,7 @@ module.exports = {
                     loader: 'babel-loader',
                     options: {
                         presets: ['@babel/preset-env', '@babel/preset-react'],
-                        plugins: ['@babel/transform-runtime'],
+                        plugins: ['@babel/transform-runtime', '@babel/proposal-class-properties'],
                     },
                 },
             },

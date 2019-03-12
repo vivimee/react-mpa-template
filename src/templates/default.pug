@@ -8,5 +8,9 @@ html
         - if ($description)
             meta(description=$description)
         meta(name="viewport" content="width=device-width")
+        style
+            include:compress-assets ../assets/style.css
+        script
+            include:compress-assets ../assets/js/rem.js
     body
         #react
