@@ -1,26 +1,26 @@
-const path = require('path');
-const chalk = require('chalk');
-const CleanWebpackPlugin = require('clean-webpack-plugin');
-const ProgressBarPlugin = require('progress-bar-webpack-plugin');
+const path = require("path");
+const chalk = require("chalk");
+const CleanWebpackPlugin = require("clean-webpack-plugin");
+const ProgressBarPlugin = require("progress-bar-webpack-plugin");
 
 const compressAssetsString = (text) => {
-    return text.replace(/\n/g, ' ').replace(/\s+/g, ' ');
-}
+    return text.replace(/\n/g, " ").replace(/\s+/g, " ");
+};
 
 module.exports = {
     entry: {},
     output: {
-        filename: 'js/[name].[chunkhash:7].js',
-        path: path.resolve(__dirname, '../dist'),
+        filename: "js/[name].[chunkhash:7].js",
+        path: path.resolve(__dirname, "../dist"),
     },
     optimization: {
-        runtimeChunk: 'single',
+        runtimeChunk: "single",
         splitChunks: {
             cacheGroups: {
                 vendor: {
                     test: /[\\/]node_modules[\\/]/,
-                    name: 'common',
-                    chunks: 'all',
+                    name: "common",
+                    chunks: "all",
                 },
             },
         },
@@ -32,53 +32,64 @@ module.exports = {
                 if (process.env.DEV_SERVER_ENTRY) {
                     console.log(
                         chalk.greenBright.bold(
-                            '\nDev server started on:  ',
+                            "\nDev server started on:  ",
                             process.env.DEV_SERVER_ENTRY,
                         ),
                     );
                 }
             },
         }),
-        new CleanWebpackPlugin(['dist'], {
-            root: path.resolve(__dirname, '../'),
+        new CleanWebpackPlugin(["dist"], {
+            root: path.resolve(__dirname, "../"),
         }),
     ],
     module: {
         rules: [
             {
                 test: /\.pug$/,
-                use: [{
-                    loader: 'pug-loader',
-                    options: {
-                        filters: {
-                            'compress-assets': compressAssetsString
-                        }
-                    }
-                }],
+                use: [
+                    {
+                        loader: "pug-loader",
+                        options: {
+                            filters: {
+                                "compress-assets": compressAssetsString,
+                            },
+                        },
+                    },
+                ],
             },
             {
                 test: /\.js$/,
                 exclude: /node_modules/,
                 use: {
-                    loader: 'babel-loader',
+                    loader: "babel-loader",
                     options: {
-                        presets: ['@babel/preset-env', '@babel/preset-react'],
-                        plugins: ['@babel/transform-runtime', '@babel/proposal-class-properties'],
+                        presets: ["@babel/preset-env", "@babel/preset-react"],
+                        plugins: [
+                            "@babel/transform-runtime",
+                            "@babel/proposal-class-properties",
+                        ],
                     },
                 },
             },
             {
                 test: /\.(css|less)$/,
-                use: ['style-loader', 'css-loader', 'less-loader'],
+                use: [
+                    "style-loader",
+                    {
+                        loader: "css-loader",
+                    },
+                    "less-loader",
+                ],
             },
             {
                 test: /\.(jpe?g|png|gif)$/,
                 use: [
                     {
-                        loader: 'url-loader',
+                        loader: "url-loader",
                         options: {
                             limit: 8192,
-                            outputPath: 'images',
+                            outputPath: "images",
                         },
                     },
                 ],
