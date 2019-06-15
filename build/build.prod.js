@@ -22,7 +22,7 @@ entries.forEach((item) => {
     const entryPath = path.resolve(__dirname, `../src/entries/${item}`);
     entry[name] = entryPath;
     const defaultEntryConfig = {
-        filename: `${name}.html`,
+        filename: `html/${name}.html`,
         favicon: "./src/images/favicon.ico",
         excludeChunks: entries
             .filter((chunk) => chunk !== item)

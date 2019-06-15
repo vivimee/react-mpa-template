@@ -10,17 +10,35 @@ const compressAssetsString = (text) => {
 module.exports = {
     entry: {},
     output: {
-        filename: "js/[name].[chunkhash:7].js",
+        filename: "js/[name].[hash].js",
+        chunkFilename: "js/[name].[chunkhash].js",
         path: path.resolve(__dirname, "../dist"),
     },
     optimization: {
+        runtimeChunk: {
+            name: "runtime",
+        },
         splitChunks: {
+            maxInitialRequests: 5,
             cacheGroups: {
-                vendor: {
-                    test: /[\\/]node_modules[\\/]/,
-                    name: "common",
+                dll: {
+                    test: /[\\/]node_modules[\\/](react|react-dom)[\\/]/,
+                    name: "dll",
+                    priority: 20,
                     chunks: "all",
+                    reuseExistingChunk: true,
+                    // enforce: true,
                 },
+                commons: {
+                    minChunks: 5,   // 至少被几个 entry 引用过才会打进 commons 里
+                    name: "commons",
+                    priority: 10,
+                    chunks: "initial",
+                    reuseExistingChunk: true,
+                    // enforce: true,
+                },
+                vendors: false,
+                default: false,
             },
         },
     },

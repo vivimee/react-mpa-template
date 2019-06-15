@@ -21,7 +21,7 @@ entries.forEach((item) => {
     const entryPath = path.resolve(__dirname, `../src/entries/${item}`);
     entry[name] = entryPath;
     const defaultEntryConfig = {
-        filename: `${name}.html`,
+        filename: `html/${name}.html`,
         favicon: "./src/images/favicon.ico",
         excludeChunks: entries.filter((chunk) => chunk !== item).map((chunk) => chunk.replace(/\.js$/, "")),
         template: "./src/templates/default.pug",
@@ -56,7 +56,7 @@ const devServer = new WebpackDevServer(compiler, devServerOptions);
 getPort()
     .then((port) => {
         const host = "127.0.0.1";
-        process.env.DEV_SERVER_ENTRY = `http://${host}:${port}${program.entry}`;
+        process.env.DEV_SERVER_ENTRY = `http://${host}:${port}/html${program.entry}`;
         devServer.listen(port, host);
     })
     .catch((e) => {

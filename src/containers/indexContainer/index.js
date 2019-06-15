@@ -13,7 +13,7 @@ export default class AContainer extends Component {
     render() {
         return (
             <div>
-                <h3>hello world ～ Index page</h3>
+                <h3>hello world ～ Index page.</h3>
             </div>
         );
     }
