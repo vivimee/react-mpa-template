@@ -6,10 +6,10 @@ const root = document.createElement('div');
 document.body.appendChild(root);
 
 export default (Container) => {
-    render(
-        <AppContainer>
-            <Container />
-        </AppContainer>,
-        root
-    );
+  render(
+    <AppContainer>
+      <Container />
+    </AppContainer>,
+    root,
+  );
 };

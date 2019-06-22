@@ -75,9 +75,17 @@ export default {
             {
                 test: /\.js$/,
                 exclude: /node_modules/,
-                use: {
-                    loader: 'babel-loader',
-                },
+                use: [
+                    'babel-loader',
+                    {
+                        loader: 'eslint-loader',
+                        options: {
+                            enforce: 'pre',
+                            formatter: require('eslint-friendly-formatter'),
+                            fix: true,
+                        },
+                    },
+                ],
             },
             {
                 test: /\.(css|less)$/,

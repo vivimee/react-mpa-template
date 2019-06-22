@@ -1,5 +1,7 @@
 import webpack from 'webpack';
 import merge from 'webpack-merge';
+import ip from 'ip';
+import getPort from 'get-port';
 import WebpackDevServer from 'webpack-dev-server';
 import webpackBaseConfig from './webpack.config';
 
@@ -13,11 +15,15 @@ const devConfig = {
     plugins: [new webpack.HotModuleReplacementPlugin()],
 };
 const webpackConfig = merge(webpackBaseConfig, devConfig);
+const ipString = ip.address();
 const devServerOptions = {
     contentBase: './dist',
     publicPath: '/',
-    host: '0.0.0.0',
+    host: ipString,
     hot: true,
+    noInfo: true,
+    open: true,
+    openPage: 'html/index.html',
     stats: {
         chunks: false,
         assets: false,
@@ -28,15 +34,12 @@ const devServerOptions = {
         entrypoints: false,
     },
 };
+const bootstrap = async () => {
+    const port = await getPort();
+    WebpackDevServer.addDevServerEntrypoints(webpackConfig, devServerOptions);
+    const compiler = webpack(webpackConfig);
+    const app = new WebpackDevServer(compiler, devServerOptions);
+    app.listen(port);
+};
 
-WebpackDevServer.addDevServerEntrypoints(webpackConfig, devServerOptions);
-const compiler = webpack(webpackConfig);
-const app = new WebpackDevServer(compiler, devServerOptions);
-
-app.listen(8080, (err) => {
-    if (err) {
-        console.log(err);
-        return;
-    }
-    console.log('server started');
-});
+bootstrap();
