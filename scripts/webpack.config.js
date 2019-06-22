@@ -1,22 +1,54 @@
-const path = require("path");
-const chalk = require("chalk");
-const CleanWebpackPlugin = require("clean-webpack-plugin");
-const ProgressBarPlugin = require("progress-bar-webpack-plugin");
+import fs from 'fs';
+import path from 'path';
+import HtmlWebpackPlugin from 'html-webpack-plugin';
+import WebpackProgressPlugin from 'progress-bar-webpack-plugin';
 
-const compressAssetsString = (text) => {
-    return text.replace(/\n/g, " ").replace(/\s+/g, " ");
-};
+const PROJECT_ROOT = path.resolve(__dirname, '../');
+const SRC_PATH = path.resolve(PROJECT_ROOT, 'src');
+const DIST_PATH = path.resolve(PROJECT_ROOT, 'dist');
+const ENTRYS_PATH = path.resolve(SRC_PATH, 'entries');
+const TEMPLATE_PATH = path.resolve(SRC_PATH, 'templates', 'index.html');
 
-module.exports = {
-    entry: {},
+const entryConfig = {};
+const htmlPlugins = [];
+
+const entries = fs.readdirSync(ENTRYS_PATH).map((filename) => ({
+    name: filename.replace(/\.js$/, ''),
+    path: path.resolve(ENTRYS_PATH, filename),
+}));
+const chunks = entries.map((entry) => entry.name);
+
+entries.forEach((entry) => {
+    entryConfig[entry.name] = entry.path;
+    htmlPlugins.push(
+        new HtmlWebpackPlugin({
+            filename: `html/${entry.name}.html`,
+            template: TEMPLATE_PATH,
+            excludeChunks: chunks.filter((chunk) => chunk !== entry.name),
+            minify: {
+                collapseWhitespace: true,
+                removeComments: true,
+            },
+        }),
+    );
+});
+
+export default {
+    entry: entryConfig,
     output: {
-        filename: "js/[name].[hash].js",
-        chunkFilename: "js/[name].[chunkhash].js",
-        path: path.resolve(__dirname, "../dist"),
+        filename: 'js/[name].[hash].js',
+        chunkFilename: 'js/[name].[chunkhash].js',
+        path: DIST_PATH,
+        publicPath: '../',
     },
+    devtool: 'source-map',
+    resolve: {
+        alias: {},
+    },
+    plugins: [new WebpackProgressPlugin(), ...htmlPlugins],
     optimization: {
         runtimeChunk: {
-            name: 'runtime'
+            name: 'runtime',
         },
         splitChunks: {
             maxInitialRequests: 5,
@@ -27,75 +59,37 @@ module.exports = {
                     chunks: 'all',
                     priority: 20,
                 },
-                default: {}
+                default: {},
             },
         },
     },
-    plugins: [
-        new ProgressBarPlugin({
-            clear: false,
-            callback: () => {
-                if (process.env.DEV_SERVER_ENTRY) {
-                    console.log(
-                        chalk.greenBright.bold(
-                            "\nDev server started on:  ",
-                            process.env.DEV_SERVER_ENTRY,
-                        ),
-                    );
-                }
-            },
-        }),
-        new CleanWebpackPlugin(["dist"], {
-            root: path.resolve(__dirname, "../"),
-        }),
-    ],
     module: {
         rules: [
-            {
-                test: /\.pug$/,
-                use: [
-                    {
-                        loader: "pug-loader",
-                        options: {
-                            filters: {
-                                "compress-assets": compressAssetsString,
-                            },
-                        },
-                    },
-                ],
-            },
             {
                 test: /\.js$/,
                 exclude: /node_modules/,
                 use: {
-                    loader: "babel-loader",
-                    options: {
-                        presets: ["@babel/preset-env", "@babel/preset-react"],
-                        plugins: [
-                            "@babel/transform-runtime",
-                            "@babel/proposal-class-properties",
-                        ],
-                    },
+                    loader: 'babel-loader',
                 },
             },
             {
                 test: /\.(css|less)$/,
                 use: [
-                    "style-loader",
+                    'style-loader',
                     {
-                        loader: "css-loader",
+                        loader: 'css-loader',
                     },
-                    "less-loader",
+                    'less-loader',
                 ],
             },
             {
                 test: /\.(jpe?g|png|gif)$/,
                 use: [
                     {
-                        loader: "url-loader",
+                        loader: 'url-loader',
                         options: {
                             limit: 8192,
-                            outputPath: "images",
+                            outputPath: 'images',
                         },
                     },
                 ],
