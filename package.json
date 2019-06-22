@@ -1,7 +1,6 @@
 {
   "name": "mpa-cli",
   "version": "1.0.0",
-  "private": true,
   "license": "MIT",
   "browserslist": "> 2%, ie 11, safari > 9",
   "scripts": {
