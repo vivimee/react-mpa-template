@@ -16,29 +16,18 @@ module.exports = {
     },
     optimization: {
         runtimeChunk: {
-            name: "runtime",
+            name: 'runtime'
         },
         splitChunks: {
             maxInitialRequests: 5,
             cacheGroups: {
-                dll: {
-                    test: /[\\/]node_modules[\\/](react|react-dom)[\\/]/,
-                    name: "dll",
+                vendors: {
+                    test: /node_modules\/(core-js|react|react-dom|react-router|react-router-dom)\//,
+                    name: 'dll',
+                    chunks: 'all',
                     priority: 20,
-                    chunks: "all",
-                    reuseExistingChunk: true,
-                    // enforce: true,
                 },
-                commons: {
-                    minChunks: 5,   // 至少被几个 entry 引用过才会打进 commons 里
-                    name: "commons",
-                    priority: 10,
-                    chunks: "initial",
-                    reuseExistingChunk: true,
-                    // enforce: true,
-                },
-                vendors: false,
-                default: false,
+                default: {}
             },
         },
     },

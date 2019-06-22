@@ -1,12 +1,11 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
 import Container from '../containers/indexContainer/index';
+import render from '../utils/render';
 
-const ele = document.querySelector('#react');
-ReactDOM.render(<Container />, ele);
+render(Container);
 
 if (module.hot) {
     module.hot.accept('../containers/indexContainer/index', () => {
-        ReactDOM.render(<Container />, ele);
+        const NewContainer = require('../containers/indexContainer/index').default;
+        render(NewContainer);
     })
 }

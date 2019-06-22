@@ -1,6 +1,6 @@
 const merge = require("webpack-merge");
-const UglifyJSPlugin = require("uglifyjs-webpack-plugin");
 const webpackConfig = require("./webpack.config");
+const WebpackVisualizerPlugin = require("webpack-visualizer-plugin");
 
 module.exports = merge(webpackConfig, {
     devtool: "source-map",
@@ -13,8 +13,6 @@ module.exports = merge(webpackConfig, {
         moduleIds: "hashed",
     },
     plugins: [
-        new UglifyJSPlugin({
-            sourceMap: true,
-        })
+        new WebpackVisualizerPlugin()
     ],
 });

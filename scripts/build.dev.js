@@ -57,7 +57,8 @@ getPort()
     .then((port) => {
         const host = "127.0.0.1";
         process.env.DEV_SERVER_ENTRY = `http://${host}:${port}/html${program.entry}`;
-        devServer.listen(port, host);
+        // devServer.listen(port, host);
+        devServer.listen(8080, host);
     })
     .catch((e) => {
         console.error("faild to get a free port");
