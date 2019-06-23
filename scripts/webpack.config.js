@@ -4,26 +4,35 @@ import HtmlWebpackPlugin from 'html-webpack-plugin';
 import WebpackProgressPlugin from 'progress-bar-webpack-plugin';
 
 const PROJECT_ROOT = path.resolve(__dirname, '../');
-const SRC_PATH = path.resolve(PROJECT_ROOT, 'src');
-const DIST_PATH = path.resolve(PROJECT_ROOT, 'dist');
-const ENTRYS_PATH = path.resolve(SRC_PATH, 'entries');
-const TEMPLATE_PATH = path.resolve(SRC_PATH, 'templates', 'index.html');
+const SRC_DIR = path.resolve(PROJECT_ROOT, 'src');
+const DIST_DIR = path.resolve(PROJECT_ROOT, 'dist');
+const ENTRYS_DIR = path.resolve(SRC_DIR, 'entries');
+const TEMPLATES_DIR = path.resolve(SRC_DIR, 'templates');
+const DEFAULT_TEMPLATE = path.resolve(TEMPLATES_DIR, '_default.pug');
 
 const entryConfig = {};
 const htmlPlugins = [];
 
-const entries = fs.readdirSync(ENTRYS_PATH).map((filename) => ({
+const entries = fs.readdirSync(ENTRYS_DIR).map((filename) => ({
     name: filename.replace(/\.js$/, ''),
-    path: path.resolve(ENTRYS_PATH, filename),
+    path: path.resolve(ENTRYS_DIR, filename),
 }));
 const chunks = entries.map((entry) => entry.name);
 
 entries.forEach((entry) => {
     entryConfig[entry.name] = entry.path;
+    let template = DEFAULT_TEMPLATE;
+    const customPugTemplate = path.resolve(TEMPLATES_DIR, `${entry.name}.pug`);
+    const customHtmlTemplate = path.resolve(TEMPLATES_DIR, `${entry.name}.html`);
+    if (fs.existsSync(customPugTemplate)) {
+        template = customPugTemplate;
+    } else if (fs.existsSync(customHtmlTemplate)) {
+        template = customHtmlTemplate;
+    }
     htmlPlugins.push(
         new HtmlWebpackPlugin({
+            template,
             filename: `html/${entry.name}.html`,
-            template: TEMPLATE_PATH,
             excludeChunks: chunks.filter((chunk) => chunk !== entry.name),
             minify: {
                 collapseWhitespace: true,
@@ -38,7 +47,7 @@ export default {
     output: {
         filename: 'js/[name].[hash].js',
         chunkFilename: 'js/[name].[chunkhash].js',
-        path: DIST_PATH,
+        path: DIST_DIR,
         publicPath: '../',
     },
     devtool: 'source-map',
@@ -73,6 +82,10 @@ export default {
     module: {
         rules: [
             {
+                test: /\.pug$/,
+                use: 'pug-loader'
+            },
+            {
                 test: /\.js$/,
                 exclude: /node_modules/,
                 use: [
@@ -81,7 +94,6 @@ export default {
                         loader: 'eslint-loader',
                         options: {
                             enforce: 'pre',
-                            formatter: require('eslint-friendly-formatter'),
                             fix: true,
                         },
                     },

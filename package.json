@@ -8,6 +8,13 @@
     "build": "node ./scripts/build.prod.js",
     "lint": "eslint --ext .js src"
   },
+  "dependencies": {
+    "react": "^16.8.3",
+    "react-dom": "^16.8.3",
+    "react-hot-loader": "^4.11.1",
+    "@babel/runtime": "^7.3.4",
+    "lodash": "^4.17.11"
+  },
   "devDependencies": {
     "@babel/core": "^7.3.3",
     "@babel/plugin-proposal-class-properties": "^7.3.4",
@@ -22,7 +29,7 @@
     "clean-webpack-plugin": "^1.0.1",
     "commander": "^2.19.0",
     "css-loader": "^2.1.0",
-    "eslint": "^6.0.0",
+    "eslint": "^5.16.0",
     "eslint-config-airbnb": "^17.1.0",
     "eslint-friendly-formatter": "^4.0.1",
     "eslint-loader": "^2.1.2",
@@ -45,12 +52,5 @@
     "webpack-dev-server": "^3.2.0",
     "webpack-merge": "^4.2.1",
     "webpack-visualizer-plugin": "^0.1.11"
-  },
-  "dependencies": {
-    "react": "^16.8.3",
-    "react-dom": "^16.8.3",
-    "react-hot-loader": "^4.11.1",
-    "@babel/runtime": "^7.3.4",
-    "lodash": "^4.17.11"
   }
 }
