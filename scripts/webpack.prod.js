@@ -2,6 +2,7 @@ import path from 'path';
 import webpack from 'webpack';
 import merge from 'webpack-merge';
 import CleanWebpackPlugin from 'clean-webpack-plugin';
+import VisualizeWebpackPlugin from 'webpack-visualizer-plugin';
 import webpackBaseConfig from './webpack.config';
 
 const prodConfig = {
@@ -10,8 +11,14 @@ const prodConfig = {
         chunkFilename: 'js/[name].min.[chunkhash].js',
     },
     mode: 'production',
+    optimization: {
+        moduleIds: 'hashed'
+    },
     plugins: [
         new CleanWebpackPlugin('dist', { root: path.resolve(__dirname, '..') }),
+        new VisualizeWebpackPlugin({
+            filename: './stats.html'
+        }),
     ],
 };
 const webpackConfig = merge(webpackBaseConfig, prodConfig);

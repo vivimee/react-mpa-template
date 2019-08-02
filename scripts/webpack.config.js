@@ -17,7 +17,6 @@ const entries = fs.readdirSync(ENTRYS_DIR).map((filename) => ({
     name: filename.replace(/\.js$/, ''),
     path: path.resolve(ENTRYS_DIR, filename),
 }));
-const chunks = entries.map((entry) => entry.name);
 
 entries.forEach((entry) => {
     entryConfig[entry.name] = entry.path;
@@ -33,7 +32,7 @@ entries.forEach((entry) => {
         new HtmlWebpackPlugin({
             template,
             filename: `html/${entry.name}.html`,
-            excludeChunks: chunks.filter((chunk) => chunk !== entry.name),
+            chunks: [entry.name],
             minify: {
                 collapseWhitespace: true,
                 removeComments: true,
@@ -60,23 +59,8 @@ export default {
             name: 'runtime',
         },
         splitChunks: {
-            maxInitialRequests: 5,
-            cacheGroups: {
-                vendors: {
-                    test: /node_modules\/(core-js|react|react-dom|react-router|react-router-dom)\//,
-                    name: 'dll',
-                    chunks: 'all',
-                    priority: 20,
-                    reuseExistingChunk: true,
-                },
-                default: {
-                    minChunks: entries.length,
-                    name: 'commons',
-                    chunks: 'initial',
-                    priority: 10,
-                    reuseExistingChunk: true,
-                },
-            },
+            chunks: 'initial',
+            name: false,
         },
     },
     module: {
