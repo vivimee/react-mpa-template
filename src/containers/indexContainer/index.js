@@ -11,10 +11,15 @@ export default class AContainer extends Component {
     console.log(res);
   }
 
+  doSomething = () => {
+    console.log('do');
+  }
+
   render() {
     return (
       <div>
         <h3>hello world ～ Index</h3>
+        <button onClick={this.doSomething} type="button">button</button>
       </div>
     );
   }
